@@ -1,41 +1,27 @@
 package robot;
 
 import robocode.AdvancedRobot;
-import robocode.Bullet;
 import robocode.ScannedRobotEvent;
+import robot.Board;
 
 public class MyRobot extends AdvancedRobot {
-
-	private boolean targetFound;
+	
+	private Board board = new Board(this);
 	
 	@Override
 	public void run() {
-		double heading = this.getHeading();
-		if(heading > 180) {
-			this.turnRight(heading - 180);
-		} else {
-			this.turnLeft(heading);
+		while(true){
+			
+			this.turnGunLeft(5);
+	
 		}
 		
-		while(!targetFound) {
-			this.turnGunRight(5);
-		}
 	}
 	
 	@Override
 	public void onScannedRobot(ScannedRobotEvent e) {
-		targetFound = true;
 		
-		this.turnRight(e.getBearing());
-		
-		double myHeading = this.getHeading();
-		double gunHeading = this.getGunHeading();
-		
-		double move = myHeading - gunHeading;
-		
-		this.turnGunLeft(move);
-		
-		
-		Bullet bullet = this.fireBullet(3.0);
+		board.updateState(e);
+
 	}
 }
