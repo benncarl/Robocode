@@ -11,17 +11,13 @@ public class MyRobot extends AdvancedRobot {
 	@Override
 	public void run() {
 		while(true){
-			
 			this.turnGunLeft(5);
-	
 		}
-		
 	}
 	
 	@Override
 	public void onScannedRobot(ScannedRobotEvent e) {
-		
 		board.updateState(e);
-
+		this.fire(3);
 	}
 }
