@@ -1,4 +1,4 @@
-package robot;
+package robot.board;
 
 import robocode.ScannedRobotEvent;
 
@@ -22,10 +22,14 @@ public class Enemy {
 		this.energy = e.getEnergy();
 		this.heading = e.getHeading();
 		this.velocity = e.getVelocity();
-		this.setLastDistance(e.getDistance());
+		this.lastDistance = e.getDistance();
 
 		this.x = point.getX();
 		this.y = point.getY();
+	}
+	
+	public Point getPoint() {
+		return new Point(this.x, this.y);
 	}
 	
 	public String getName() {

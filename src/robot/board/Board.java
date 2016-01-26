@@ -1,11 +1,14 @@
-package robot;
+package robot.board;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import robocode.ScannedRobotEvent;
 import robocode.util.Utils;
+import robot.MyRobot;
 
 public class Board {
 	
@@ -18,7 +21,7 @@ public class Board {
 		this.me = me;
 	}
 	
-	public void updateState(ScannedRobotEvent e){
+	public void updateEnemy(ScannedRobotEvent e){
 		double absoluteHeading = Utils.normalAbsoluteAngleDegrees(me.getHeading() + e.getBearing());
 		Point enemyPoint = triangulate(absoluteHeading, e.getDistance());
 		
@@ -28,7 +31,20 @@ public class Board {
 		this.printEnemies();
 	}
 	
-	public Point triangulate(double absoluteHeading, double distance){
+	public List<Enemy> getEnemyList() {
+		List<Enemy> enemyList = new ArrayList<Enemy>();
+		
+		for(Map.Entry<String, Enemy> enemy : this.enemies.entrySet()) {
+			enemyList.add(enemy.getValue());
+		}
+		return enemyList;
+	}
+	
+	public void removeEnemy(String name) {
+		enemies.remove(name);
+	}
+	
+	private Point triangulate(double absoluteHeading, double distance){
 		double xAngle = getXAngleFromHeading(absoluteHeading);
 		double yAngle = 90 - xAngle;
 		
