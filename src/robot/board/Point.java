@@ -18,8 +18,8 @@ public class Point {
 	}
 	
 	public double headingFrom(Point point) {
-		double x = this.x - point.getX();
-		double y = this.y - point.getY();
+		double x = point.getX() - this.x;
+		double y = point.getY() - this.y;
 		double d = this.distanceFrom(point);
 		
 		double xAngle = Math.toDegrees(Math.asin(Math.abs(x)/d));

@@ -9,6 +9,7 @@ import java.util.Map;
 import robocode.ScannedRobotEvent;
 import robocode.util.Utils;
 import robot.MyRobot;
+import robot.PositionUtils;
 
 public class Board {
 	
@@ -23,7 +24,7 @@ public class Board {
 	
 	public void updateEnemy(ScannedRobotEvent e){
 		double absoluteHeading = Utils.normalAbsoluteAngleDegrees(me.getHeading() + e.getBearing());
-		Point enemyPoint = triangulate(absoluteHeading, e.getDistance());
+		Point enemyPoint = PositionUtils.triangulatePoint(absoluteHeading, e.getDistance(), me.getPoint());
 		
 		Enemy enemy = new Enemy(e, enemyPoint);
 		enemies.put(enemy.getName(), enemy);
@@ -44,26 +45,6 @@ public class Board {
 		enemies.remove(name);
 	}
 	
-	private Point triangulate(double absoluteHeading, double distance){
-		double xAngle = getXAngleFromHeading(absoluteHeading);
-		double yAngle = 90 - xAngle;
-		
-		int xDirection = absoluteHeading < 180 ? 1 : -1;
-		int yDirection = absoluteHeading > 270 || absoluteHeading < 90 ? 1 : -1;
-		
-		double x = xDirection * distance * Math.sin(Math.toRadians(xAngle));
-		double y = yDirection * distance * Math.sin(Math.toRadians(yAngle));
-		
-		return new Point(this.me.getX() + x, this.me.getY() + y);
-	}
-	
-	private double getXAngleFromHeading(double absoluteHeading) {
-		return absoluteHeading < 90  ? absoluteHeading : 
-			   absoluteHeading < 180 ? 180 - absoluteHeading :
-			   absoluteHeading < 270 ? absoluteHeading - 180 : 
-			    	                   360 - absoluteHeading;
-	}
-
 	private void printEnemies() {
 		System.out.println("-------Enemies-------");
 		for(Map.Entry<String, Enemy> entry : this.enemies.entrySet()) {

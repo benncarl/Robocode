@@ -4,13 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import robot.MyRobot;
+import robot.PositionUtils;
 import robot.board.Enemy;
 import robot.board.Point;
 
 public class Movement {
 
-	private final static double ENEMY_STRENGTH = -1;
-	private final static double WALL_STRENGTH = -5;
+	private final static double ENEMY_STRENGTH = 1000;
+	private final static double WALL_STRENGTH = 10000;
 	
 	private final List<GravityPoint> gravPoints = new ArrayList<GravityPoint>();
 	
@@ -34,51 +35,49 @@ public class Movement {
 			double distance = gravPoint.distanceFrom(robot.getPoint());
 			double heading = gravPoint.headingFrom(robot.getPoint());
 			
-			double force = gravPoint.getStrength() / Math.pow(distance, 2);
+			int decayRate = gravPoint.isWallPoint() ? 3 : 2;
+			double force = gravPoint.getStrength() / Math.pow(distance, decayRate);
+			
 			xForce += getForceComponent(force, heading, true);
 			yForce += getForceComponent(force, heading, false);
 		}
 		
+		Point destination = new Point(robot.getX() + xForce, robot.getY() + yForce);
 		double force = Math.sqrt(Math.pow(xForce, 2) + Math.pow(yForce, 2));
+		
+		robot.moveToDestination(force, destination);
 	}
 	
 	public void updateGravPoints(List<Enemy> enemies, double myX, double myY) {
 		this.gravPoints.clear();
 		
 		for(Enemy enemy : enemies) {
-			this.gravPoints.add(new GravityPoint(enemy.getPoint(), ENEMY_STRENGTH));
+			this.gravPoints.add(new GravityPoint(enemy.getPoint(), ENEMY_STRENGTH, false));
 		}
 		
 		this.addWallGravPoints(myX, myY);
 	}
 	
 	private double getForceComponent(double force, double heading, boolean isXComponent) {
-		double xAngle = getXAngleFromHeading(heading);
+		double xAngle = PositionUtils.getXAngleFromHeading(heading);
 		double yAngle = 90 - xAngle;
 		
 		double forceComponent;
 		if(isXComponent) {
-			int xDirection = heading < 180 ? 1 : -1;
+			int xDirection = PositionUtils.getXDirectionFromHeading(heading);
 			forceComponent = xDirection * force * Math.sin(Math.toRadians(xAngle));
 		} else {
-			int yDirection = heading > 270 || heading < 90 ? 1 : -1;
+			int yDirection = PositionUtils.getYDirectionFromHeading(heading);
 			forceComponent = yDirection * force * Math.sin(Math.toRadians(yAngle));
 		}
 		
 		return forceComponent;
 	}
 	
-	private double getXAngleFromHeading(double absoluteHeading) {
-		return absoluteHeading < 90  ? absoluteHeading : 
-			   absoluteHeading < 180 ? 180 - absoluteHeading :
-			   absoluteHeading < 270 ? absoluteHeading - 180 : 
-			    	                   360 - absoluteHeading;
-	}
-	
 	private void addWallGravPoints(double myX, double myY) {
-		this.gravPoints.add(new GravityPoint(myX, this.boardHeight, WALL_STRENGTH));
-		this.gravPoints.add(new GravityPoint(this.boardWidth, myY, WALL_STRENGTH));
-		this.gravPoints.add(new GravityPoint(myX, 0, WALL_STRENGTH));
-		this.gravPoints.add(new GravityPoint(0, myY, WALL_STRENGTH));
+		this.gravPoints.add(new GravityPoint(myX, this.boardHeight, WALL_STRENGTH, true));
+		this.gravPoints.add(new GravityPoint(this.boardWidth, myY, WALL_STRENGTH, true));
+		this.gravPoints.add(new GravityPoint(myX, 0, WALL_STRENGTH, true));
+		this.gravPoints.add(new GravityPoint(0, myY, WALL_STRENGTH, true));
 	}
 }
