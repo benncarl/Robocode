@@ -55,7 +55,7 @@ public class Movement {
 			this.gravPoints.add(new GravityPoint(enemy.getPoint(), ENEMY_STRENGTH, false));
 		}
 		
-		this.addWallGravPoints(myX, myY);
+//		this.addWallGravPoints(myX, myY);
 	}
 	
 	private double getForceComponent(double force, double heading, boolean isXComponent) {
