@@ -1,5 +1,7 @@
 package robot;
 
+import java.awt.Graphics2D;
+
 import robocode.AdvancedRobot;
 import robocode.RobotDeathEvent;
 import robocode.ScannedRobotEvent;
@@ -18,7 +20,6 @@ public class MyRobot extends AdvancedRobot {
 	public void run() {
 		this.movement = new Movement(this.getBattleFieldHeight(), this.getBattleFieldWidth());
 		this.scanner = new Target(this.board.getEnemyList());
-		this.setAdjustGunForRobotTurn(true);
 		this.setAdjustRadarForGunTurn(true);
 		this.setAdjustRadarForRobotTurn(true);
 		
@@ -42,8 +43,15 @@ public class MyRobot extends AdvancedRobot {
 		double dx = destination.getX() - this.getX();
 		
 		double angle = this.getPoint().headingFrom(destination);
+		double bearing;
 		
-		double bearing = normalizeBearing(this.getHeading() - angle);
+		if(dx > 0){
+			bearing = 90 - Math.toDegrees(Math.atan2(dy, dx));
+		} else if(dx < 0){
+			bearing = 270 - Math.toDegrees(Math.atan2(dy, dx));
+		} else{
+			bearing = dy >= 0 ? 0 : 180;
+		}
 		
 		int moveDir;
 		if(bearing > 90) {
@@ -56,35 +64,19 @@ public class MyRobot extends AdvancedRobot {
 			moveDir = 1;
 		}
 		
-//		double bearing;
-//		if(dx > 0){
-//			bearing = 90 - Math.toDegrees(Math.atan2(dy, dx));
-//		}
-//		else if(dx < 0){
-//			bearing = 270 - Math.toDegrees(Math.atan2(dy, dx));
-//		}
-//		else{
-//			bearing = dy >= 0 ? 0 : 180;
-//		}
-		
-		//if(this.getTurnRemaining() <= 0 && distance * 1000 > 5) {
-		if(distance * 1000 > 5) {
+		if(distance > 5) {
 			this.setTurnLeft(bearing);
 		}
 		
-		
-		this.setAhead(moveDir * distance * 1000);
+		this.setAhead(moveDir * distance);
 	}
 	
-	public double normalizeBearing(double angle){
+	@Override
+	public void onPaint(Graphics2D g) {
+		Point destination = this.movement.getDestination();
+		g.drawLine((int)this.getX(), (int)this.getY(), 
+				(int)destination.getX(), (int)destination.getY());
 		
-		if(angle > 180){
-			angle -= 180;
-		}
-		else if(angle > -180){
-			angle += 180;
-		}
-		return angle;
 	}
 	
 	@Override
