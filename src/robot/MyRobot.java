@@ -1,8 +1,12 @@
 package robot;
 
+import java.awt.BasicStroke;
+import java.awt.Graphics2D;
+
 import robocode.AdvancedRobot;
 import robocode.RobotDeathEvent;
 import robocode.ScannedRobotEvent;
+import robocode.util.Utils;
 import robot.board.Board;
 import robot.board.Point;
 import robot.movement.Movement;
@@ -35,59 +39,31 @@ public class MyRobot extends AdvancedRobot {
 		board.updateEnemy(e);
 		movement.updateGravPoints(this.board.getEnemyList(), this.getX(), this.getY());
 		scanner.updateEnemies(this.board.getEnemyList());
-		this.scan();
-	
-		
 	}
 	
 	public void moveToDestination(double distance, Point destination) {
-		double dy = destination.getY() - this.getY();
-		double dx = destination.getX() - this.getX();
+		double absoluteBearing = Utils.normalRelativeAngleDegrees(this.getPoint().headingFrom(destination));
+		double bearing = Utils.normalRelativeAngleDegrees(absoluteBearing - this.getHeading());
 		
-		double angle = this.getPoint().headingFrom(destination);
+		int moveDir = Math.abs(bearing) > 90 ? -1 : 1;
 		
-		double bearing = normalizeBearing(this.getHeading() - angle);
-		
-		int moveDir;
-		if(bearing > 90) {
-			bearing -= 180;
-			moveDir = -1;
-		} else if(bearing < -90) {
-			bearing += 180;
-			moveDir = -1;
-		} else {
-			moveDir = 1;
+		if(Math.abs(bearing) > 90) {
+			if(bearing > 0) {
+				bearing -= 180;
+			} else {
+				bearing += 180;
+			}
 		}
 		
-//		double bearing;
-//		if(dx > 0){
-//			bearing = 90 - Math.toDegrees(Math.atan2(dy, dx));
-//		}
-//		else if(dx < 0){
-//			bearing = 270 - Math.toDegrees(Math.atan2(dy, dx));
-//		}
-//		else{
-//			bearing = dy >= 0 ? 0 : 180;
-//		}
+		if(distance < 50) distance = 50;
 		
-		//if(this.getTurnRemaining() <= 0 && distance * 1000 > 5) {
-		if(distance * 1000 > 5) {
-			this.setTurnLeft(bearing);
-		}
-		
-		
-		this.setAhead(moveDir * distance * 1000);
+		this.setTurnRight(bearing);
+		this.setAhead(moveDir * distance);
 	}
 	
-	public double normalizeBearing(double angle){
-		
-		if(angle > 180){
-			angle -= 180;
-		}
-		else if(angle > -180){
-			angle += 180;
-		}
-		return angle;
+	@Override public void onPaint(Graphics2D g) {
+		g.setStroke(new BasicStroke(10));
+		g.drawLine((int)this.getX(), (int)this.getY(), (int)this.movement.getDestination().getX(), (int)this.movement.getDestination().getY());
 	}
 	
 	@Override
