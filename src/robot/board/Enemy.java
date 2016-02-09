@@ -11,6 +11,7 @@ public class Enemy {
 	private double heading;
 	private double velocity;
 	private double lastDistance;
+	private double bearing;
 	
 	private double x;
 	private double y;
@@ -18,7 +19,7 @@ public class Enemy {
 	public Enemy(ScannedRobotEvent e, Point point){
 		this.name = e.getName();
 		this.scanTime = e.getTime();
-		
+		this.bearing = e.getBearing();
 		this.energy = e.getEnergy();
 		this.heading = e.getHeading();
 		this.velocity = e.getVelocity();
@@ -86,5 +87,13 @@ public class Enemy {
 	}
 	public void setY(double y) {
 		this.y = y;
+	}
+
+	public double getBearing() {
+		return bearing;
+	}
+
+	public void setBearing(double bearing) {
+		this.bearing = bearing;
 	}
 }

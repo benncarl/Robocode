@@ -25,6 +25,7 @@ public class MyRobot extends AdvancedRobot {
 		while(true){
 			this.setTurnRadarLeft(360);
 			this.movement.move(this); 
+			this.scanner.autoTarget(this);
 			this.execute();
 		}
 	}
@@ -33,7 +34,9 @@ public class MyRobot extends AdvancedRobot {
 	public void onScannedRobot(ScannedRobotEvent e) {
 		board.updateEnemy(e);
 		movement.updateGravPoints(this.board.getEnemyList(), this.getX(), this.getY());
+		scanner.updateEnemies(this.board.getEnemyList());
 		this.scan();
+	
 		
 	}
 	
