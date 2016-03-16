@@ -1,12 +1,12 @@
-package robot.movement;
+package gravbot.movement;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import robot.MyRobot;
-import robot.PositionUtils;
-import robot.board.Enemy;
-import robot.board.Point;
+import gravbot.GravBot;
+import gravbot.PositionUtils;
+import gravbot.board.Enemy;
+import gravbot.board.Point;
 
 public class Movement {
 
@@ -25,7 +25,7 @@ public class Movement {
 		this.boardWidth = boardWidth;
 	}
 	
-	public void move(MyRobot robot) {
+	public void move(GravBot robot) {
 		if(this.gravPoints.isEmpty()) {
 			return;
 		}

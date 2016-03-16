@@ -1,4 +1,4 @@
-package robot.board;
+package gravbot.board;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -6,19 +6,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import gravbot.GravBot;
+import gravbot.PositionUtils;
 import robocode.ScannedRobotEvent;
 import robocode.util.Utils;
-import robot.MyRobot;
-import robot.PositionUtils;
+import gravbot.board.Point;
 
 public class Board {
 	
 	private HashMap<String, Enemy> enemies = new HashMap<String, Enemy>();
-	private MyRobot me;
+	private GravBot me;
 	
 	DecimalFormat df = new DecimalFormat("#"); 
 	
-	public Board(MyRobot me){
+	public Board(GravBot me){
 		this.me = me;
 	}
 	

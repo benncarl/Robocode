@@ -1,6 +1,6 @@
-package robot.movement;
+package gravbot.movement;
 
-import robot.board.Point;
+import gravbot.board.Point;
 
 public class GravityPoint extends Point {
 

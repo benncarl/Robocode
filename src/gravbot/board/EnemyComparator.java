@@ -1,4 +1,4 @@
-package robot.board;
+package gravbot.board;
 
 import java.util.Comparator;
 

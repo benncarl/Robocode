@@ -1,6 +1,6 @@
-package robot;
+package gravbot;
 
-import robot.board.Point;
+import gravbot.board.Point;
 
 public abstract class PositionUtils {
 

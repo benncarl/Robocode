@@ -1,12 +1,12 @@
-package robot.targeting;
+package gravbot.targeting;
 
 import java.util.Collections;
 import java.util.List;
 
+import gravbot.GravBot;
 import robocode.util.Utils;
-import robot.MyRobot;
-import robot.board.Enemy;
-import robot.board.EnemyComparator;
+import gravbot.board.Enemy;
+import gravbot.board.EnemyComparator;
 
 public class Target {
 	
@@ -16,7 +16,7 @@ public class Target {
 		this.enemies = enemies;
 	}
 	
-	public void autoTarget(MyRobot myRobot){
+	public void autoTarget(GravBot myRobot){
 		if(!enemies.isEmpty()){
 			Enemy enemy = enemies.get(0);
 			

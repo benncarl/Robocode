@@ -1,6 +1,7 @@
-package robot.board;
+package gravbot.board;
 
 import robocode.ScannedRobotEvent;
+import gravbot.board.Point;
 
 public class Enemy {
 
@@ -16,7 +17,7 @@ public class Enemy {
 	private double x;
 	private double y;
 	
-	public Enemy(ScannedRobotEvent e, Point point){
+	public Enemy(ScannedRobotEvent e, Point enemyPoint){
 		this.name = e.getName();
 		this.scanTime = e.getTime();
 		this.bearing = e.getBearing();
@@ -25,8 +26,8 @@ public class Enemy {
 		this.velocity = e.getVelocity();
 		this.lastDistance = e.getDistance();
 
-		this.x = point.getX();
-		this.y = point.getY();
+		this.x = enemyPoint.getX();
+		this.y = enemyPoint.getY();
 	}
 	
 	public Point getPoint() {

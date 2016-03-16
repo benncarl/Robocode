@@ -1,4 +1,4 @@
-package robot;
+package gravbot;
 
 import java.awt.BasicStroke;
 import java.awt.Graphics2D;
@@ -7,12 +7,12 @@ import robocode.AdvancedRobot;
 import robocode.RobotDeathEvent;
 import robocode.ScannedRobotEvent;
 import robocode.util.Utils;
-import robot.board.Board;
-import robot.board.Point;
-import robot.movement.Movement;
-import robot.targeting.Target;
+import gravbot.board.Board;
+import gravbot.board.Point;
+import gravbot.movement.Movement;
+import gravbot.targeting.Target;
 
-public class MyRobot extends AdvancedRobot {
+public class GravBot extends AdvancedRobot {
 	
 	private Board board = new Board(this);
 	private Movement movement;

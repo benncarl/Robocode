@@ -245,11 +245,51 @@ parent(epimetheus, dione).
 mother(X,Y) :- female(X), parent(X,Y).
 father(X,Y) :- male(X), parent(X,Y).
 
-ancestor(X,Y) :- parent(X,Y).
+ancestor(A,B) :- parent(A,B).
 ancestor(A,C) :- parent(A,B), ancestor(B,C).
 
-descendant(X,Y) :- parent(Y,X).
-descandant(A,C) :- parent(B,A), descendant(B,C).
+descendant(A,B) :- parent(B,A).
+descendant(A,C) :- parent(B,A), descendant(B,C).
+descendant(A,B,C) :- descendant(A,B), descendant(A,C).
+
+sibling(A,B) :- parent(C,A), parent(C,B), A \== B.
+
+aunt_or_uncle(A,B) :- parent(C,B), sibling(C,A).
+
+cousin(A,B) :- aunt_or_uncle(C,A), parent(C,B).
+
+second_cousin(A,B) :- parent(C,A), cousin(C,D), parent(D,B).
+
+
+
+print_solution :-
+
+write('Who are the descendants of Zeus and Hera?'), nl,
+setof(X, descendant(X, hera, zeus), Q1), write(Q1), nl, nl,
+%
+write('Who are Apollo\'s parents?'), nl,
+setof(X, parent(X, apollo), Q2), write(Q2), nl, nl,
+%
+write('Who is Ares\' father?'), nl,
+setof(X, father(X, ares), Q3), write(Q3), nl, nl,
+%
+write('Who are Aphrodite\'s aunts and uncles?'), nl,
+setof(X, aunt_or_uncle(X, aphrodite), Q4), write(Q4), nl, nl,
+%
+write('List all of The Muses\' ancestors.'), nl,
+setof(X, ancestor(X, muses), Q5), write(Q5), nl, nl,
+%
+write('Is Athena a descendant of Poseidon?'), nl,
+Q6 = parent(poseidon, athena), write(Q6), nl, nl,
+%
+write('List all pairs of second-cousins.'), nl,
+setof((X,Y), sibling(X, Y), Q7), write(Q7), nl, nl.
+%
+%write('List all first-cousins once removed.'), nl,
+
+?- print_solution.
+
+
 /*
 child(babyGeorge,william).
 
@@ -260,7 +300,7 @@ descend(X,Y) :- child(X,Y).
 descend(A,C) :- child(A,B), descend(B,C).
 
 print_solution :-
-write('who are descends?'), nl,
+nl, write('who are descends?'), nl,
 bagof(X,descend(X,_), Query1),
 write(Query1), nl,
 write('Who are descend pairss?'), nl,
